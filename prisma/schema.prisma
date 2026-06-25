@@ -1,0 +1,24 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresgl"
+    url     = env("DATABASE_URL")
+}
+
+model Video {
+  id           String   @id @default(cuid())
+  storageKey   String   @unique
+  originalName String?
+  status       String   @default("pending")
+  createdAt    DateTime @default(now())
+}
+
+model DailyLot {
+  id        String   @id @default(cuid())
+  day       String   @unique
+  videoId   String   @unique
+  createdAt DateTime @default(now())
+  video     Video    @relation(fields: [videoId], references: [id])
+}
